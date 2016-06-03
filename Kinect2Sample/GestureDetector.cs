@@ -42,9 +42,6 @@ namespace Kinect2Sample
         /// <summary> Gesture frame reader which will handle gesture events coming from the sensor </summary>
         private VisualGestureBuilderFrameReader vgbFrameReader = null;
 
-        /// <summary> TCP Client used to communicate with rPi
-        TcpClient client = new TcpClient();
-
         /// <summary>
         /// Initializes a new instance of the GestureDetector class along with the gesture frame source and reader
         /// </summary>
@@ -107,10 +104,6 @@ namespace Kinect2Sample
                     }
                 }
             }
-
-            // setup TCPClient
-            IPEndPoint ep = new IPEndPoint(IPAddress.Parse("169.254.0.2"), int.Parse("51717"));
-            client.Connect(ep);
         }
 
         /// <summary> Gets the GestureResultView object which stores the detector results for display in the UI </summary>
@@ -249,9 +242,6 @@ namespace Kinect2Sample
                                     this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
                                     if (result.Confidence > 0.7)
                                     {
-                                        byte[] messageToSend = Encoding.ASCII.GetBytes("bow");
-                                        client.Send(messageToSend, messageToSend.Length);
-
                                         Debug.WriteLine("bowed");
                                     }
 
@@ -269,8 +259,6 @@ namespace Kinect2Sample
                                     this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
                                     if (result.Confidence > 0.7)
                                     {
-                                        byte[] messageToSend = Encoding.ASCII.GetBytes("arm_up");
-                                        client.Send(messageToSend, messageToSend.Length);
                                         Debug.WriteLine("raised hand");
                                     }
                                 }
@@ -286,16 +274,9 @@ namespace Kinect2Sample
                                     this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
                                     if (result.Confidence > 0.7)
                                     {
-                                        byte[] messageToSend = Encoding.ASCII.GetBytes("arm_down");
-                                        client.Send(messageToSend, messageToSend.Length);
                                         Debug.WriteLine("lowered hand");
                                     }
                                 }
-                            }
-                            else
-                            {
-                                byte[] messageToSend = Encoding.ASCII.GetBytes("nocommand");
-                                client.Send(messageToSend, messageToSend.Length);
                             }
                         }
                     }
